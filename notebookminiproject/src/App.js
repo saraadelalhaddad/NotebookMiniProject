@@ -1,36 +1,36 @@
 import React from "react";
-import Sidebar from "./Sidebar";
-import { Title, Wrapper, Description } from "./styles";
-import noteBookStore from "./stores/noteBookStore";
 import NoteBookList from "./components/NoteBookList";
+import { Title, Wrapper, HomeImg } from "./styles";
+import noteBookStore from "./stores/noteBookStore";
 import { Route, Switch, BrowserRouter as Router } from "react-router-dom";
 import NotesList from "./components/NotesList";
+import { observer } from "mobx-react";
+import NavBar from "./components/NavBar";
+import backgroundimg from "./backgroundHome.jpg";
 
 function App() {
   return (
     <Router>
-      <div className="App" id="outer-container">
-        <Sidebar
-          pageWrapId={"page-wrap"}
-          outerContainerId={"outer-container"}
-        />
-        <div id="page-wrap">
+      <Switch>
+        <Route path="/notes">
+          <NotesList />
+        </Route>
+
+        <Route path="/notebooks">
+          {" "}
+          <NoteBookList noteBook={noteBookStore.noteBook} />
+        </Route>
+
+        <Route path="/">
+          <NavBar />
           <Wrapper>
             <Title> My note Book </Title>
-            <Description> my subjects </Description>
+            <HomeImg src={backgroundimg} />
           </Wrapper>
-          <Switch>
-            <Route path="/noteBook">
-              <NoteBookList noteBooks={noteBookStore.noteBooks} />
-            </Route>
-            <Route path="/notes">
-              <NotesList />
-            </Route>
-          </Switch>
-        </div>
-      </div>
+        </Route>
+      </Switch>
     </Router>
   );
 }
 
-export default App;
+export default observer(App);

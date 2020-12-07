@@ -1,21 +1,20 @@
 import React from "react";
-import { useState } from "react";
 import noteBookStore from "../stores/noteBookStore";
+import { useState } from "react";
 import Modal from "react-modal";
 import { CreatButtonStyled } from "../styles";
 
-const NoteBookModal = ({ isOpen, closeModal, createNoteBook }) => {
-  const [noteBook, setNoteBook] = useState({
+const NotesModal = ({ isOpen, closeModal, createNotes }) => {
+  const [notes, setNotes] = useState({
     name: "",
   });
-
   const handleChange = (event) => {
-    setNoteBook({ ...noteBook, [event.target.name]: event.target.value });
+    setNotes({ ...notes, [event.target.name]: event.target.value });
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    noteBookStore.createNoteBook(noteBook);
+    noteBookStore.createNotes(notes);
 
     closeModal();
   };
@@ -24,26 +23,25 @@ const NoteBookModal = ({ isOpen, closeModal, createNoteBook }) => {
     <Modal
       isOpen={isOpen}
       onRequestClose={closeModal}
-      contentLabel="subject Modal"
+      contentLabel="notes Modal"
     >
-      <h3>New subject</h3>
       <form onSubmit={handleSubmit}>
         <div className="form-group row">
           <div className="col-6">
-            <label> Subject </label>
+            <label> notes </label>
             <input
-              value={noteBook.name}
+              value={notes.name}
               name="name"
               onChange={handleChange}
               type="text"
               className="form-control"
             />
           </div>
-          <CreatButtonStyled type="submit">{createNoteBook}</CreatButtonStyled>
+          <CreatButtonStyled type="submit">{createNotes}</CreatButtonStyled>
         </div>
       </form>
     </Modal>
   );
 };
 
-export default NoteBookModal;
+export default NotesModal;

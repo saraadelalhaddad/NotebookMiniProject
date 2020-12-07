@@ -1,12 +1,10 @@
 import React from "react";
-import NoteBookModal from "../components/NoteBookModal";
 import { useState } from "react";
+import NotesModal from "../components/NotesModal";
 import { makeStyles } from "@material-ui/core/styles";
-import { green } from "@material-ui/core/colors";
 import Icon from "@material-ui/core/Icon";
-import { AccessAlarm, ThreeDRotation } from "@material-ui/icons";
 
-const AddButton = (props) => {
+const NotesButton = () => {
   const [isOpen, setIsOpen] = useState(false);
   const closeModal = () => setIsOpen(false);
   const openModal = () => setIsOpen(true);
@@ -24,13 +22,11 @@ const AddButton = (props) => {
   return (
     <>
       <div className={classes.root}>
-        <Icon onClick={openModal} style={{ color: green[500] }}>
-          Add Subject
-        </Icon>
+        <Icon onClick={openModal}>Add Notes</Icon>
       </div>
-      <NoteBookModal isOpen={isOpen} closeModal={closeModal} />
+      <NotesModal isOpen={isOpen} closeModal={closeModal} />
     </>
   );
 };
 
-export default AddButton;
+export default NotesButton;

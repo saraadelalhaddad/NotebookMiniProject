@@ -1,73 +1,58 @@
 import React from "react";
-import ReactDOM from "react-dom";
-import { WithContext as ReactTags } from "react-tag-input";
+import { makeStyles } from "@material-ui/core/styles";
+import Chip from "@material-ui/core/Chip";
+import Paper from "@material-ui/core/Paper";
+import TagFacesIcon from "@material-ui/icons/TagFaces";
 
-const KeyCodes = {
-  comma: 188,
-  enter: 13,
+const Tags = () => {
+  const useStyles = makeStyles((theme) => ({
+    root: {
+      display: "flex",
+      justifyContent: "center",
+      flexWrap: "wrap",
+      listStyle: "none",
+      padding: theme.spacing(0.5),
+      margin: 0,
+    },
+    chip: {
+      margin: theme.spacing(0.5),
+    },
+  }));
+
+  const classes = useStyles();
+  const [chipData, setChipData] = React.useState([
+    { key: 0, label: "HW" },
+    { key: 1, label: "Projects" },
+  ]);
+
+  const handleDelete = (chipToDelete) => () => {
+    setChipData((chips) =>
+      chips.filter((chip) => chip.key !== chipToDelete.key)
+    );
+  };
+
+  return (
+    <Paper component="ul" className={classes.root}>
+      {chipData.map((data) => {
+        let icon;
+
+        if (data.label === "React") {
+          icon = <TagFacesIcon />;
+        }
+
+        return (
+          <li key={data.key}>
+            <Chip
+              icon={icon}
+              label={data.label}
+              onDelete={data.label === "React" ? undefined : handleDelete(data)}
+              className={classes.chip}
+            />
+          </li>
+        );
+      })}
+    </Paper>
+  );
 };
 
-const delimiters = [KeyCodes.comma, KeyCodes.enter];
-
-class App extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      tags: [
-        { id: "Thailand", text: "Thailand" },
-        { id: "India", text: "India" },
-      ],
-      suggestions: [
-        { id: "HW", text: "HomeWork" },
-        { id: "Project", text: "Project" },
-        { id: "Exame", text: "Exame" },
-      ],
-    };
-    this.handleDelete = this.handleDelete.bind(this);
-    this.handleAddition = this.handleAddition.bind(this);
-    this.handleDrag = this.handleDrag.bind(this);
-  }
-
-  handleDelete(i) {
-    const { tags } = this.state;
-    this.setState({
-      tags: tags.filter((tag, index) => index !== i),
-    });
-  }
-
-  handleAddition(tag) {
-    this.setState((state) => ({ tags: [...state.tags, tag] }));
-  }
-
-  handleDrag(tag, currPos, newPos) {
-    const tags = [...this.state.tags];
-    const newTags = tags.slice();
-
-    newTags.splice(currPos, 1);
-    newTags.splice(newPos, 0, tag);
-
-    // re-render
-    this.setState({ tags: newTags });
-
-    // Add
-    let placeholder = "Add new subject";
-  }
-  render() {
-    const { tags, suggestions } = this.state;
-    return (
-      <div>
-        <ReactTags
-          tags={tags}
-          suggestions={suggestions}
-          handleDelete={this.handleDelete}
-          handleAddition={this.handleAddition}
-          handleDrag={this.handleDrag}
-          delimiters={delimiters}
-        />
-      </div>
-    );
-  }
-}
-
-ReactDOM.render(<App />, document.getElementById("app"));
+export default Tags;
